@@ -10,7 +10,7 @@ class WeatherDataStore {
   httpRequestStore = new HttpRequestStore();
 
   weatherData = [];
-  searchInputValue = "Tbilisi";
+  searchInputValue = "";
   isLoading = false;
 
   updateWeatherData = (weatherData = []) => {
@@ -39,6 +39,6 @@ class WeatherDataStore {
   updateSearchInputValue(value) {
     this.searchInputValue = value;
   }
-  
+
 }
 export default WeatherDataStore;

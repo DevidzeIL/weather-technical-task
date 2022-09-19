@@ -1,8 +1,8 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { toJS } from "mobx";
 import WeatherContext from "./WeatherContext";
-import { CircularProgress } from "@material-ui/core";
+import { CircularProgress, FormHelperText } from "@material-ui/core";
 import { weatherStyles } from "./weatherStyles.js";
 
 const WeatherActions = observer(() => {
@@ -12,13 +12,33 @@ const WeatherActions = observer(() => {
   const weatherData = weatherStore.weatherData;
   const data = toJS(weatherData);
   const isLoading = weatherStore.isLoading;
+  const [errorField, setErrorField] = useState(false)
 
   const inputChangeHandler = (event) =>
     weatherStore.updateSearchInputValue(event.target.value);
 
   const handleSubmit = async () => {
+    if (!weatherStore.searchInputValue) {
+      setErrorField(true);
+      return;
+    }
+    setErrorField(false);
     weatherStore.fetchWeather();
   };
+
+  useEffect(() => {
+    const keyDownHandler = event => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        handleSubmit();
+      }
+    };
+    document.addEventListener('keydown', keyDownHandler);
+    return () => {
+      document.removeEventListener('keydown', keyDownHandler);
+    };
+  }, []);
+
 
   return (
     <div>
@@ -31,6 +51,11 @@ const WeatherActions = observer(() => {
         />
         <button className={classes.btn__search} onClick={handleSubmit}>Search</button>
       </div>
+      {errorField && (
+        <FormHelperText style={{color:'red'}}>
+          Field is required
+        </FormHelperText>
+      )}
 
       <label> Results for City Name: {data?.city}</label>
       <br />
@@ -39,7 +64,7 @@ const WeatherActions = observer(() => {
         isLoading ?
           <>
             <div className={classes.loading}>
-              <CircularProgress color="info" className={classes.circle} />
+              <CircularProgress color="inherit" className={classes.circle} />
             </div>
           </> : <></>
       }
