@@ -11,6 +11,13 @@ export const weatherStyles = makeStyles(() => ({
     width: "100%",
   },
 
+  btn: {
+    backgroundColor: "coral",
+    color: "#FFF",
+    border: "1px solid #000",
+    cursor: "pointer",
+  },
+
   btn__search: {
     backgroundColor: "coral",
     padding: "10px 20px",

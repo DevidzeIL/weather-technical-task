@@ -4,8 +4,10 @@ import { toJS } from "mobx";
 import WeatherContext from "./WeatherContext";
 import { CircularProgress, FormHelperText } from "@material-ui/core";
 import { weatherStyles } from "./weatherStyles.js";
+import { useNavigate } from "react-router-dom";
 
 const WeatherActions = observer(() => {
+  const navigate = useNavigate();
   const classes = weatherStyles();
   const weatherStore = useContext(WeatherContext);
 
@@ -26,6 +28,11 @@ const WeatherActions = observer(() => {
     weatherStore.fetchWeather();
   };
 
+  const handleLogout = async () => {
+    localStorage.removeItem("access");
+    navigate("/app/weather");
+  };
+
   useEffect(() => {
     const keyDownHandler = event => {
       if (event.key === 'Enter') {
@@ -42,6 +49,7 @@ const WeatherActions = observer(() => {
 
   return (
     <div>
+      <button className={classes.btn} onClick={handleLogout}>Log out</button>
       <div className={classes.block__search}>
         <input
           className={classes.input__search}
@@ -52,7 +60,7 @@ const WeatherActions = observer(() => {
         <button className={classes.btn__search} onClick={handleSubmit}>Search</button>
       </div>
       {errorField && (
-        <FormHelperText style={{color:'red'}}>
+        <FormHelperText style={{ color: 'red' }}>
           Field is required
         </FormHelperText>
       )}

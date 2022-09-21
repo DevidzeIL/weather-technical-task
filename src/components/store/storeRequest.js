@@ -1,6 +1,8 @@
 import axios from 'axios';
 
 export const httpRequest = async (url, method = null, data = null, headers = {}) => {
+  const isAuth = localStorage.getItem('access');
+    headers['Authorization'] = `Bearer ${isAuth}`;
     headers['Content-Type'] = 'application/json';
 
     const req = {
