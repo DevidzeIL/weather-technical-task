@@ -44,7 +44,7 @@ const WeatherActions = observer(() => {
     return () => {
       document.removeEventListener('keydown', keyDownHandler);
     };
-  }, []);
+  });
 
 
   return (
@@ -59,6 +59,7 @@ const WeatherActions = observer(() => {
         />
         <button className={classes.btn__search} onClick={handleSubmit}>Search</button>
       </div>
+
       {errorField && (
         <FormHelperText style={{ color: 'red' }}>
           Field is required
